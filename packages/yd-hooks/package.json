@@ -11,7 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@yideng/libs": "workspace:*",
+    "@yideng/libs": "1.0.1",
     "lerna": "^8.2.4"
-  }
+  },
+  "gitHead": "b1cc4af89ddb546ebbdd9bcb085a610e55383ca0"
 }

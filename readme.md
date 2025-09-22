@@ -72,3 +72,6 @@ pnpm add lerna --filter @yideng/cli
   }
 }
 ```
+6. 
+7. 
+![alt text](image-1.png)

@@ -1,3 +1,3 @@
 const init = require('@yideng/libs')
 
-console.log('init:', init)
+console.log('init: ', init)
