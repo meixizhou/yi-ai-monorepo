@@ -121,3 +121,88 @@ pnpm publish --registry http://localhost:4873 --access public
 
 # Verdaccio
 https://verdaccio.org/zh-CN/docs/what-is-verdaccio
+
+
+# 踩的坑
+
+1. 因为Verdaccio服务没启动服务发失败了，重新publish又报
+lerna publish
+lerna notice cli v8.2.4
+lerna info versioning independent
+lerna notice Current HEAD is already released, skipping change detection.
+lerna success No changed packages to publish
+ChatGPT said:
+
+
+你现在看到的这句：
+
+lerna notice Current HEAD is already released, skipping change detection.
+lerna success No changed packages to publish
+
+
+其实不是报错，而是 正常提示：
+
+上一次 lerna publish 已经把版本号改了（比如 @yideng/hooks 从 1.0.3 → 1.0.4）。
+
+Lerna 会在仓库里打 git tag 并提交 commit。
+
+现在你再跑一次，Lerna 会检测到 HEAD 已经对应最新 tag，所以认为没有新改动，就不会再发。
+
+怎么继续发包？
+✅ 方法 1：手动修改代码/版本
+
+随便改一下某个包的文件，或者手动 bump 版本号，然后再跑：
+
+lerna publish
+
+
+Lerna 才会检测到有变化。
+
+✅ 方法 2：强制发布
+
+如果你想跳过 diff 检测，强制发一版：
+
+lerna publish from-package
+
+
+或者：
+
+lerna publish --force-publish
+
+✅ 方法 3：只改版本，不发包
+
+如果你之前发失败了，只想让 Lerna 再试一次 “npm publish” 部分，可以用：
+
+lerna publish from-package --registry https://registry.npmjs.org/
+
+
+这样它会直接拿 package.json 里的版本去发，而不是重新 bump。
+
+👉 你的情况是：版本号已经 +1，但上一次发失败了。
+所以建议直接用 lerna publish from-package，它会用现有版本重新发布，不需要再改代码。
+
+2. 包发失败，
+"dependencies": {
+  "@yideng/libs": "workspace:*"
+}
+
+会被改成具体依赖版本
+
+"dependencies": {
+  "@yideng/libs": "@1.0.2"
+}
+失败后更改错误再发，会出现找不到依赖包
+
+
+包发成功的过程
+"dependencies": {
+  "@yideng/libs": "workspace:*"
+}
+变成
+"dependencies": {
+  "@yideng/libs": "@1.0.2"
+}
+再变回
+"dependencies": {
+  "@yideng/libs": "workspace:*"
+}
