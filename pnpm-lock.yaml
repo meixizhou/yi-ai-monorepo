@@ -17,9 +17,6 @@ importers:
       '@yideng/libs':
         specifier: workspace:*
         version: link:../yd-libs
-      lerna:
-        specifier: ^8.2.4
-        version: 8.2.4(encoding@0.1.13)
 
   packages/yd-libs: {}
 
