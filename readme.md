@@ -206,3 +206,63 @@ lerna publish from-package --registry https://registry.npmjs.org/
 "dependencies": {
   "@yideng/libs": "workspace:*"
 }
+
+3. ![alt text](image-2.png)
+
+原因是你的 根目录 package.json 里写了：
+
+"scripts": {
+  "publish": "lerna publish"
+}
+
+
+所以当你运行：
+
+npx lerna publish from-package
+
+
+Lerna 实际上做了两步：
+
+publish 子包 → 成功 ✅
+
+触发根目录的 publish script → 又执行了一次 lerna publish → 这次没有包需要发，就直接报错 ❌
+
+这就是「包发成功了，但 monorepo 根目录脚本又失败」的原因。
+
+解决办法
+✅ 方法 1：不要在根目录定义 "publish": "lerna publish"
+
+直接删掉或改名，比如：
+
+"scripts": {
+  "release": "lerna publish"
+}
+
+
+以后用：
+
+pnpm run release
+
+✅ 方法 2：只跑 lerna publish from-package
+
+不要通过 npm run publish 或 pnpm run publish 去调用。直接运行：
+
+npx lerna publish from-package
+
+
+这样不会触发根目录脚本里的二次调用。
+
+✅ 方法 3：加个保护
+
+如果你确实想保留 "publish": "lerna publish"，可以在 package.json 脚本里写成：
+
+"scripts": {
+  "publish": "lerna publish || true"
+}
+
+
+这样即使第二次执行失败，也不会影响退出码。
+
+👉 总结：
+你的包 已经发布成功了，报错只是因为根目录的 publish 脚本又跑了一次 Lerna。
+建议你把脚本名字换成 release，以后直接用 npx lerna publish from-package 重试发布。

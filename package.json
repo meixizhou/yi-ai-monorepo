@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "lerna publish",
-    "publish:libs": "lerna publish --include-filtered-dependencies --scope @yideng/libs",  
-    "publish:hooks": "lerna publish --include-filtered-dependencies --scope @yideng/hooks" 
+    "release": "lerna publish",
+    "release:libs": "lerna publish --include-filtered-dependencies --scope @yideng/libs",  
+    "release:hooks": "lerna publish --include-filtered-dependencies --scope @yideng/hooks" 
   },
   "keywords": [],
   "author": "",
